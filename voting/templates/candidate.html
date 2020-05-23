@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <h1 class="mt-4">Кандидат:{{ candidate_id.name }} {{candidate_id.surname}}</h1>
+
+    <div class="row">
+        <div class="col-6">
+            <h2><img src= "{{ candidate_id.image.url.url }}" alt = '{{ candidate_id.surname }}' width="100%"></h2>
+        </div>
+        <div class="col-6">
+            <h2 class="text-left">Биография</h2>
+            <p>{{ candidate_id.biography }}</p>
+        </div>
+    </div>
+
+    <hr>
+    <p>{{ candidate_id.election_programme}}</p>
+
+    <hr>
+    <p>Комментарии ({{candidate_id.comments_candidates.all.count}})</p>
+
+    <hr>
+    <ul>
+    {% for comment in  candidate_id.comments_candidates.all %}
+        <li>
+        Дата создания: {{ comment.date  }} <br>
+        Автор комментария: {{ comment.author  }} <br> <br>
+
+        {{ comment.text }}
+        <hr>
+
+        </li>
+    {% endfor %}
+
+    </ul>
+      {% if request.user.is_anonymous == False and request.user.is_active == True %}
+      <p>Добавить комментарий</p>
+     <hr>
+
+    <div class="col-4">
+
+      <form action="" id="add_form" method="post" >
+          {% csrf_token %}
+          {{ form.as_p }}
+      </form>
+    <button form = "add_form" type="submit" class="btn btn-primary">Добавить</button>
+    {% endif %}
+    </div>
+{% endblock %}
